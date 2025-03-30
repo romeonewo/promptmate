@@ -1,6 +1,10 @@
 import json
 import requests
 import os
+from colorama import init, Fore
+
+# Initialize colorama
+init(autoreset=True)
 
 # Load the API key from config.json
 def load_config():
@@ -39,23 +43,33 @@ def save_chat_history(history):
 # Chat function
 def chat():
     chat_history = load_chat_history()
-    print("\n🟢 Welcome to PromptMate! Type '/exit' to quit or '/clear' to reset chat.\n")
+    
+    # Define the system role to initialize the assistant's personality and role
+    system_message = {
+        "role": "system",
+        "content": "You are Vortex, an AI assistant on the terminal. You are here to help the user with coding, provide information, and engage in friendly conversation. You are kind, knowledgeable, and professional, but you also have a playful side."
+    }
+
+    print("\n🟢 Welcome to Vortex! Your AI assistant on the terminal. Type '/exit' to quit or '/clear' to reset chat.\n")
 
     while True:
-        user_input = input("You: ").strip()
+        user_input = input(Fore.CYAN + "You: ").strip()  # User prompt in Cyan
 
         if user_input.lower() == "/exit":
-            print("👋 Exiting... Chat saved!")
+            print(Fore.YELLOW + "👋 Exiting... Chat saved!")  # Exit message in Yellow
             save_chat_history(chat_history)
             break
         elif user_input.lower() == "/clear":
             chat_history = []
             save_chat_history(chat_history)
-            print("✅ Chat history cleared.")
+            print(Fore.YELLOW + "✅ Chat history cleared.")  # Clear message in Yellow
             continue
 
         # Add user message to chat history
         chat_history.append({"role": "user", "content": user_input})
+
+        # Include the system message for the AI's role and personality
+        messages = [system_message] + chat_history
 
         try:
             # Send request to OpenRouter API using 'requests' method
@@ -69,14 +83,14 @@ def chat():
                 },
                 data=json.dumps({
                     "model": "deepseek/deepseek-chat-v3-0324:free",
-                    "messages": chat_history
+                    "messages": messages
                 })
             )
 
             # Check if the response is successful
             if response.status_code == 200:
                 bot_reply = response.json().get("choices", [{}])[0].get("message", {}).get("content", "")
-                print(f"AI: {bot_reply}\n")
+                print(Fore.GREEN + f"Vortex: {bot_reply}\n")  # AI response in Green
 
                 # Add bot response to chat history
                 chat_history.append({"role": "assistant", "content": bot_reply})
@@ -84,10 +98,10 @@ def chat():
                 # Save updated chat history
                 save_chat_history(chat_history)
             else:
-                print(f"❌ Error: {response.status_code} - {response.text}")
+                print(Fore.RED + f"❌ Error: {response.status_code} - {response.text}")
 
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(Fore.RED + f"❌ Error: {e}")
 
 # Run the chatbot
 if __name__ == "__main__":
