@@ -32,13 +32,15 @@ A lightweight Python-based terminal chatbot powered by OpenAI's API through Open
   ```
 # Configuration:
 
-**Create config.json with your OpenRouter API key:**
+3. **Create config.json with your OpenRouter API key:**
+
 ```
 {
   "openai_api_key": "your-api-key-here"
 }
 ```
-#Customization
+
+4. #Customization
 **customize the prompt to change behaviour**
 ```
 system_message = {
