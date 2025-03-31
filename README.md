@@ -29,7 +29,7 @@ A lightweight Python-based terminal chatbot powered by OpenAI's API through Open
    ```bash
    git clone https://github.com/yourusername/vortex-chat.git
    cd vortex-chat
-  ```
+   ```
 
 3. **Create config.json with your OpenRouter API key:**
 
