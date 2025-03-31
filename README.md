@@ -33,14 +33,14 @@ A lightweight Python-based terminal chatbot powered by OpenAI's API through Open
 
 3. **Create config.json with your OpenRouter API key:**
 
-```
+```bash
 {
   "openai_api_key": "your-api-key-here"
 }
 ```
 
 4. **customize the prompt to change behaviour**
-```
+```bash
 system_message = {
     "role": "system",
     "content": "Customize this prompt to change my behavior..."
